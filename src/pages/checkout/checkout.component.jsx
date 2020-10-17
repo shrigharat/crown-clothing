@@ -6,6 +6,7 @@ import "./checkout.styles.scss";
 
 import {selectCartItems, selectCartTotal} from "../../redux/cart/cart.selectors";
 import CheckoutItem from "../../components/checkout-item/checkout-item.component";
+import StripeButton from "../../components/stripe-button/stripe-button.component";
 
 const CheckoutPage = ({cartItems, cartTotal}) => (
     <div className='checkout-page'>
@@ -32,6 +33,11 @@ const CheckoutPage = ({cartItems, cartTotal}) => (
         <div className='total'>
             <span>TOTAL: ₹ {cartTotal}</span>
         </div>
+        <div className='test-warning'>
+            *Please use the the following card details for testing purpose <br/>
+            4242 4242 4242 4242 - Expiry date: (any future date) of the format mm/yy - CVV: any 3 digit number
+        </div>
+        <StripeButton price={cartTotal}/>
     </div>
 );
 
