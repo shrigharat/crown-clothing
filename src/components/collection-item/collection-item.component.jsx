@@ -4,8 +4,11 @@ import {connect} from "react-redux";
 import './collection-item.styles.scss';
 import CustomButton from "../custom-button/custom-button.component";
 import {addItem} from "../../redux/cart/cart.actions";
+import {addItemToWishlist} from "../../redux/wishlist/wishlist.actions";
+import {createStructuredSelector} from "reselect";
+import {selectWishlistItems} from "../../redux/wishlist/wishlist.selectors";
 
-const CollectionItem = ({item, addItem}) => {
+const CollectionItem = ({item, addItemToCart, addItemToWishlist, wishlistItems}) => {
     const {id, name, price, imageUrl} = item;
 
     return (
@@ -14,19 +17,38 @@ const CollectionItem = ({item, addItem}) => {
                 className='image'
                 style={{backgroundImage: `url(${imageUrl})`}}
             />
+            <div onClick={() => addItemToWishlist(item)}>
+                {
+                    isItemInWishlist(wishlistItems, item) ?
+                        <i className="fas fa-heart selected"></i>
+                        :
+                        <i className="far fa-heart unselected"></i>
+                }
+            </div>
             <div className='collection-footer'>
                 <span className='name'>{name}</span>
                 <span className='price'>{price}</span>
             </div>
-            <CustomButton inverted onClick={()=>addItem(item)}>Add to cart</CustomButton>
+            <CustomButton inverted onClick={()=>addItemToCart(item)}>Add to cart</CustomButton>
         </div>
     );
 }
 
-const dispatchToProps = dispatch => (
+const mapStateToProps = createStructuredSelector(
     {
-        addItem: item => dispatch(addItem(item))
+        wishlistItems: selectWishlistItems
     }
 );
 
-export default connect(null, dispatchToProps)(CollectionItem);
+const dispatchToProps = dispatch => (
+    {
+        addItemToCart: item => dispatch(addItem(item)),
+        addItemToWishlist: item => dispatch(addItemToWishlist(item))
+    }
+);
+
+const isItemInWishlist = (itemList, itemToCheck) => {
+    return itemList.hasOwnProperty(`${itemToCheck.id}`)
+}
+
+export default connect(mapStateToProps, dispatchToProps)(CollectionItem);

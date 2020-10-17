@@ -15,6 +15,7 @@ import Header from "./components/header/header.component";
 import {auth, createUserProfileDocument} from './firebase/firebase.utils';
 import {setCurrentUser} from "./redux/user/user.actions";
 import {selectCurrentUser} from "./redux/user/user.selectors";
+import Wishlist from "./pages/wishlist/wishlist.component";
 
 class App extends Component {
 
@@ -22,10 +23,10 @@ class App extends Component {
 
     componentDidMount() {
         const {setCurrentUser} = this.props;
-        this.unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
-            if(userAuth) {
+        this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+            if (userAuth) {
                 const userRef = createUserProfileDocument(userAuth);
-                (await userRef).onSnapshot( snapshot => {
+                (await userRef).onSnapshot(snapshot => {
                     setCurrentUser(
                         {
                             id: snapshot.id,
@@ -33,7 +34,7 @@ class App extends Component {
                         }
                     )
                 })
-            }else {
+            } else {
                 setCurrentUser(userAuth);
             }
 
@@ -46,26 +47,27 @@ class App extends Component {
     }
 
     render() {
-      return (
-          <div>
-              <Header/>
-              <Switch>
-                  <Route exact path='/' component={HomePage}/>
-                  <Route path='/shop' component={ShopPage}/>
-                  <Route path='/checkout' component={CheckoutPage}/>
-                  <Route path='/sign-in' exact
-                         render={
-                             ()=> {
-                                  return this.props.currentUser ?
-                                     <Redirect to='/'/>
-                                     :
-                                     <SignAndSignUpPage />
-                             }
-                         }/>
-              </Switch>
-          </div>
-      );
-  }
+        return (
+            <div>
+                <Header/>
+                <Switch>
+                    <Route exact path='/' component={HomePage}/>
+                    <Route path='/shop' component={ShopPage}/>
+                    <Route path='/checkout' component={CheckoutPage}/>
+                    <Route path='/sign-in' exact
+                           render={
+                               () => {
+                                   return this.props.currentUser ?
+                                       <Redirect to='/'/>
+                                       :
+                                       <SignAndSignUpPage/>
+                               }
+                           }/>
+                    <Route path='/wishlist' component={Wishlist}/>
+                </Switch>
+            </div>
+        );
+    }
 }
 
 const mapStateToProps = createStructuredSelector(
@@ -75,7 +77,7 @@ const mapStateToProps = createStructuredSelector(
 );
 
 const dispatchToProps = dispatch => ({
-   setCurrentUser: user => dispatch(setCurrentUser(user))
+    setCurrentUser: user => dispatch(setCurrentUser(user))
 });
 
 export default connect(mapStateToProps, dispatchToProps)(App);

@@ -4,8 +4,10 @@ import {connect} from "react-redux";
 import "./checkout-item.styles.scss";
 import {addItem, clearItemFromCart, removeItem} from "../../redux/cart/cart.actions";
 import {addItemToCart} from "../../redux/cart/cart.utils";
+import CustomButton from "../custom-button/custom-button.component";
+import {addItemToWishlist} from "../../redux/wishlist/wishlist.actions";
 
-const CheckoutItem = ({cartItem, clearCartItem, removeItem, addItem}) => {
+const CheckoutItem = ({cartItem, clearCartItem, removeItem, addItem, addItemToWishlist}) => {
     const {name, price, quantity, imageUrl} = cartItem;
     return (
         <div className='checkout-item'>
@@ -19,7 +21,10 @@ const CheckoutItem = ({cartItem, clearCartItem, removeItem, addItem}) => {
                 <div className='arrow' onClick={() => addItem(cartItem)}><i className="fas fa-plus"></i></div>
             </span>
             <span className='price'>{price}</span>
-            <div className='remove' onClick={() => clearCartItem(cartItem)}>&#10005;</div>
+            <div className='options'>
+                <CustomButton className='action-button' onClick={() => clearCartItem(cartItem)}>Remove From Cart</CustomButton>
+                <CustomButton className='action-button' onClick={() => addItemToWishlist(cartItem)}>Move to wishlist</CustomButton>
+            </div>
         </div>
     );
 };
@@ -28,7 +33,8 @@ const dispatchToProps = dispatch => (
     {
         addItem: (item) => dispatch(addItem(item)),
         clearCartItem: (item) => dispatch(clearItemFromCart(item)),
-        removeItem: (item) => dispatch(removeItem(item))
+        removeItem: (item) => dispatch(removeItem(item)),
+        addItemToWishlist: (item) => dispatch(addItemToWishlist(item))
     }
 );
 
