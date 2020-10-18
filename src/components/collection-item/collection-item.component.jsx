@@ -17,11 +17,6 @@ const CollectionItem = ({item, addItemToCart, addItemToWishlist, wishlistItems, 
             <div
                 className='image'
                 style={{backgroundImage: `url(${imageUrl})`}}
-                onClick={
-                    () => {
-                        history.push(`${match.path}/:id`)
-                    }
-                }
             />
             <div onClick={() => addItemToWishlist(item)}>
                 {
