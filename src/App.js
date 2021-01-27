@@ -12,38 +12,33 @@ import CheckoutPage from "./pages/checkout/checkout.component";
 
 import Header from "./components/header/header.component";
 
-import {auth, createUserProfileDocument} from './firebase/firebase.utils';
-import {setCurrentUser} from "./redux/user/user.actions";
+import {checkUserSession} from "./redux/user/user.actions";
+
 import {selectCurrentUser} from "./redux/user/user.selectors";
 import Wishlist from "./pages/wishlist/wishlist.component";
 
 class App extends Component {
 
-    unsubscribeFromAuth = null;
-
     componentDidMount() {
-        const {setCurrentUser} = this.props;
-        this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-            if (userAuth) {
-                const userRef = createUserProfileDocument(userAuth);
-                (await userRef).onSnapshot(snapshot => {
-                    setCurrentUser(
-                        {
-                            id: snapshot.id,
-                            ...snapshot.data()
-                        }
-                    )
-                })
-            } else {
-                setCurrentUser(userAuth);
-            }
+        const {checkUserSession} = this.props;
+        checkUserSession();
+        // this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+        //     if (userAuth) {
+        //         const userRef = createUserProfileDocument(userAuth);
+        //         (await userRef).onSnapshot(snapshot => {
+        //             setCurrentUser(
+        //                 {
+        //                     id: snapshot.id,
+        //                     ...snapshot.data()
+        //                 }
+        //             )
+        //         })
+        //     } else {
+        //         setCurrentUser(userAuth);
+        //     }
+        //
+        // });
 
-        });
-
-    }
-
-    componentWillUnmount() {
-        this.unsubscribeFromAuth();
     }
 
     render() {
@@ -76,8 +71,10 @@ const mapStateToProps = createStructuredSelector(
     }
 );
 
-const dispatchToProps = dispatch => ({
-    setCurrentUser: user => dispatch(setCurrentUser(user))
-});
+const dispatchToProps = dispatch => (
+    {
+        checkUserSession: () => dispatch(checkUserSession())
+    }
+);
 
 export default connect(mapStateToProps, dispatchToProps)(App);

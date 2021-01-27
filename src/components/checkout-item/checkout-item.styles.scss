@@ -41,14 +41,14 @@
     flex-direction: column;
 
     .action-button {
-      font-size: 14px;
+      font-size: 12px;
       background-color: #0a368f;
       min-height: 40px;
       color: azure;
       border: none;
       margin-bottom: 15px;
-      padding: 5px;
-      box-shadow: 3px 3px 5px lightslategrey;
+      padding: 0;
+      box-shadow: 3px 3px 7px #0a368f;
     }
   }
 }

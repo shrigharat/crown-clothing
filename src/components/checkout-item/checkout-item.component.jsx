@@ -23,7 +23,16 @@ const CheckoutItem = ({cartItem, clearCartItem, removeItem, addItem, addItemToWi
             <span className='price'>{price}</span>
             <div className='options'>
                 <CustomButton className='action-button' onClick={() => clearCartItem(cartItem)}>Remove From Cart</CustomButton>
-                <CustomButton className='action-button' onClick={() => addItemToWishlist(cartItem)}>Move to wishlist</CustomButton>
+                <CustomButton className='action-button'
+                              onClick={
+                                  () => {
+                                      addItemToWishlist(cartItem);
+                                      clearCartItem(cartItem);
+                                  }
+                              }
+                >
+                    Move to wishlist
+                </CustomButton>
             </div>
         </div>
     );
